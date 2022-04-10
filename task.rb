@@ -5,7 +5,7 @@ def q1
   names = ["田中", "佐藤", "佐々木", "高橋"]
 
   # 以下に回答を記載
-  names.push("斎藤")
+  names << "斎藤"
   puts names
 end
 
@@ -14,7 +14,7 @@ def q2
   array2 = ["bird", "bat", "tiger"]
 
   # 以下に回答を記載
-  array = array1.concat(array2)
+  array = array1 + array2
   puts array
 end
 
@@ -30,7 +30,7 @@ def q4
   sports = ["サッカー", "フットサル", nil, "野球", "バスケ", nil, "バレー"]
 
   # 以下に回答を記載
-  sports.delete(nil)
+  sports.compact!
 
   # 以下は変更しないで下さい
   p sports
@@ -49,12 +49,7 @@ q5
 
 def q6
   numbers1 = [1, 2, 3, 4, 5]
-
-  # 以下に回答を記載
-  numbers2 = []
-  numbers1.each do |n1|
-    numbers2.push(n1*10)
-  end
+  numbers2 = numbers1.map{|x| x * 10}
   puts numbers2
 end
 
@@ -62,9 +57,7 @@ def q7
   array = ["1", "2", "3", "4", "5"]
 
   # 以下に回答を記載
-  array.each.with_index do |n,i|
-    array[i] = n.to_i
-  end
+  array = array.map{|x| x.to_i}
   # 以下は変更しないで下さい
   p array
 end
@@ -74,9 +67,7 @@ def q8
 
   # 以下に回答を記載
   upper_case_programming_languages = []
-  programming_languages.each.with_index do |programming_language,i|
-    upper_case_programming_languages[i] = programming_language.upcase
-  end
+  upper_case_programming_languages = programming_languages.map{|x| x.upcase}
   # 以下は変更しないで下さい
   p programming_languages
   p upper_case_programming_languages
@@ -108,16 +99,7 @@ def q11
   sports = ["サッカー", "バスケ", "野球", ["フットサル", "野球"], "水泳", "ハンドボール", ["卓球", "サッカー", "ボルダリング"]]
 
   # 以下に回答を記載
-  new_sports = []
-  sports.each.with_index do |sport, i|
-    if sport.class.name == "Array" 
-      sport.each do |sport_i|
-        new_sports.push(sport_i)
-      end
-    else
-      new_sports.push(sport)
-    end
-  end
+  new_sports = sports.flatten
   unique_sports = new_sports.uniq
   unique_sports.each.with_index(1) do |sport,i|
     puts "No#{i} #{sport}"
@@ -128,8 +110,7 @@ def q12
   data = { user: { name: "satou", age: 33 } }
 
   # 以下に回答を記載
-  user = data[:user]
-  puts user[:name]
+  puts data[:user][:name]
 
 end
 
@@ -138,9 +119,7 @@ def q13
   update_data = { age: 32, address: "沖縄" }
 
   # 以下に回答を記載
-  user_data.delete(:name)
-  user_data[:age] = 32
-  user_data[:address] = "沖縄"
+  user_data.update(update_data)
   puts user_data
 end
 
@@ -148,11 +127,7 @@ def q14
   data = { name: "satou", age: 33, address: "saitama", hobby: "soccer", email: "hoge@fuga.com" }
 
   # 以下に回答を記載
-  keys = []
-  data.each_key do |key|
-    keys.push(key)
-  end
-  puts keys
+  puts data.keys
 end
 
 def q15
@@ -160,16 +135,8 @@ def q15
   data2 = { name: "yamada", hobby: "baseball", role: "normal" }
 
   # 以下に回答を記載
-  if data1[:age].nil?
-    puts "NG"
-  else
-    puts "OK"
-  end
-  if data2[:age].nil?
-    puts "NG"
-  else
-    puts "OK"
-  end
+  puts data1[:age].nil? ? "NG" : "OK"
+  puts data2[:age].nil? ? "NG" : "OK"
 
 end
 
@@ -196,9 +163,11 @@ class UserQ17
   end
 
   def info
-    puts "名前：#{@name}"
-    puts "年齢：#{@age}"
-    puts "性別：#{@gender}"
+    puts <<~TEXT
+      名前：#{@name}
+      年齢：#{@age}
+      性別：#{@gender}
+    TEXT
   end
 end
 
@@ -233,26 +202,23 @@ def q18
   user1 = UserQ18.new(name: "あじー", age: 32)
   user2 = UserQ18.new(name: "ゆたぼん", age: 10)
 
-  puts user1.introduce
-  puts user2.introduce
+  print user1.introduce
+  print user2.introduce
 end
 
 class Item
   # 以下を修正して下さい
+  attr_reader :name
 
   def initialize(name)
     @name = name
-  end
-
-  def name
-    puts @name[:name]
   end
 end
 
 def q19
   # ここは変更しないで下さい
   book = Item.new(name: "ゼロ秒思考")
-  puts book.name
+  print book.name
 end
 
 class UserQ20
@@ -272,14 +238,15 @@ class Zoo
   end
 
   def info_entry_fee(user)
-    if user.age.between?(0, 5)
-      puts "#{user.name}さんの入場料金は #{@entry_fee[:infant]} 円です。"
-    elsif user.age.between?(6, 12)
-      puts "#{user.name}さんの入場料金は #{@entry_fee[:children]} 円です。"
-    elsif user.age.between?(13, 64)
-      puts "#{user.name}さんの入場料金は #{@entry_fee[:adult]} 円です。"
-    elsif user.age.between?(65, 120)
-      puts "#{user.name}さんの入場料金は #{@entry_fee[:senior]} 円です。"
+    case user.age
+      when 0..5
+        puts "#{user.name}さんの入場料金は #{@entry_fee[:infant]} 円です。"
+      when 6..12
+        puts "#{user.name}さんの入場料金は #{@entry_fee[:children]} 円です。"
+      when 13..64
+        puts "#{user.name}さんの入場料金は #{@entry_fee[:adult]} 円です。"
+      when 65..120
+        puts "#{user.name}さんの入場料金は #{@entry_fee[:senior]} 円です。"
     end
   end
 end
