@@ -48,16 +48,16 @@ end
 q5
 
 def q6
-  numbers1 = [1, 2, 3, 4, 5]
-  numbers2 = numbers1.map{|x| x * 10}
-  puts numbers2
+  numbers = [1, 2, 3, 4, 5]
+  numbers.map!{|number| number * 10}
+  p numbers
 end
 
 def q7
   array = ["1", "2", "3", "4", "5"]
 
   # 以下に回答を記載
-  array = array.map{|x| x.to_i}
+  array.map!(&:to_i)
   # 以下は変更しないで下さい
   p array
 end
@@ -66,8 +66,8 @@ def q8
   programming_languages = %w(ruby php python javascript)
 
   # 以下に回答を記載
-  upper_case_programming_languages = []
-  upper_case_programming_languages = programming_languages.map{|x| x.upcase}
+  programming_languages.map!(&:capitalize)
+  upper_case_programming_languages = programming_languages.map(&:upcase)
   # 以下は変更しないで下さい
   p programming_languages
   p upper_case_programming_languages
@@ -99,9 +99,9 @@ def q11
   sports = ["サッカー", "バスケ", "野球", ["フットサル", "野球"], "水泳", "ハンドボール", ["卓球", "サッカー", "ボルダリング"]]
 
   # 以下に回答を記載
-  new_sports = sports.flatten
-  unique_sports = new_sports.uniq
-  unique_sports.each.with_index(1) do |sport,i|
+  sports.flatten!
+  sports.uniq!
+  sports.each.with_index(1) do |sport,i|
     puts "No#{i} #{sport}"
   end
 end
@@ -190,9 +190,9 @@ class UserQ18
 
   def introduce
     if @age>20
-      puts "こんにちは，#{@name}と申します。宜しくお願いいたします。"
+      print "こんにちは，#{@name}と申します。宜しくお願いいたします。"
     else
-      puts "はいさいまいど〜，#{@name}です！！！"
+      print "はいさいまいど〜，#{@name}です！！！"
     end
   end
 end
@@ -202,8 +202,8 @@ def q18
   user1 = UserQ18.new(name: "あじー", age: 32)
   user2 = UserQ18.new(name: "ゆたぼん", age: 10)
 
-  print user1.introduce
-  print user2.introduce
+  puts user1.introduce
+  puts user2.introduce
 end
 
 class Item
@@ -238,16 +238,17 @@ class Zoo
   end
 
   def info_entry_fee(user)
-    case user.age
+    admission_fee = case user.age
       when 0..5
-        puts "#{user.name}さんの入場料金は #{@entry_fee[:infant]} 円です。"
+        @entry_fee[:infant]
       when 6..12
-        puts "#{user.name}さんの入場料金は #{@entry_fee[:children]} 円です。"
+        @entry_fee[:children]
       when 13..64
-        puts "#{user.name}さんの入場料金は #{@entry_fee[:adult]} 円です。"
+        @entry_fee[:adult]
       when 65..120
-        puts "#{user.name}さんの入場料金は #{@entry_fee[:senior]} 円です。"
+        @entry_fee[:senior]
     end
+    puts "#{user.name}さんの入場料金は #{admission_fee} 円です。"
   end
 end
 
